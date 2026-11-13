@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anay Mohan Shembekar</title>
+<meta name="description" content="Anay Mohan Shembekar: engineer-builder. PhD candidate at IISc Bengaluru; electric powertrain and engineering lead at Avishkar Hyperloop; quantitative research at J.P. Morgan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Single theme by choice: always ivory. Palette: Wada-inspired jade and vermilion, 60/30/10. Layout idea: a quiet engineering notebook with colour blocks around the portrait. One live waveform (a tone burst, like an LDV trace) carries the hero; everything else is a calm two-column grid with mono metadata on the left. */
+:root{
+  --bg:#f3ebdd;              /* 60: ivory ground, from the Wada cover's peach, toned down */
+  --surface:#fbf7f0;
+  --ink:#1f2a26;
+  --muted:#5e6a64;
+  --rule:#dbd1bf;
+  --jade:#2e5a4b;            /* 30: structure */
+  --jade-soft:rgba(46,90,75,.10);
+  --on-jade:#f6efe3;
+  --accent:#c4452c;          /* 10: vermilion */
+  --accent-soft:rgba(196,69,44,.10);
+  --mustard:#e2b23a;         /* highlight only */
+  --display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --measure:66ch;
+  color-scheme: light;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font:16px/1.6 var(--body); -webkit-font-smoothing:antialiased}
+a{color:inherit; text-decoration-color:var(--accent); text-underline-offset:3px; text-decoration-thickness:1.5px}
+a:hover{color:var(--accent)}
+a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+.wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+.mono{font-family:var(--mono); font-size:.8rem; letter-spacing:.02em; color:var(--muted)}
+
+/* nav */
+header.top{position:sticky; top:0; z-index:5; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule)}
+header.top .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; height:56px}
+.mark{font-family:var(--display); font-weight:800; letter-spacing:-.01em; text-decoration:none}
+nav ul{display:flex; gap:20px; list-style:none; margin:0; padding:0; flex-wrap:wrap}
+nav a{font-family:var(--mono); font-size:.8rem; text-decoration:none; color:var(--muted)}
+nav a:hover{color:var(--ink)}
+
+/* hero */
+.hero{padding:56px 0 24px}
+.hero-grid{display:grid; grid-template-columns:1fr 220px; gap:40px; align-items:end}
+.hero h1{font-family:var(--display); font-weight:800; font-size:clamp(2.6rem, 6.4vw, 5.2rem); line-height:.96; letter-spacing:-.035em; margin:0 0 20px; text-wrap:balance}
+.hero h1 span{display:block; font-weight:400; color:var(--muted); font-size:.42em; letter-spacing:-.01em; margin-top:14px; line-height:1.2}
+.lede{max-width:var(--measure); font-size:1.12rem; margin:0}
+.lede strong{font-weight:600}
+.portrait{aspect-ratio:3/4; background:var(--surface); display:grid; place-items:center; position:relative}
+.portrait{overflow:hidden; padding:0; border:0}
+.portrait-wrap{position:relative; padding:0 0 14px 14px}
+.portrait-wrap::before{content:""; position:absolute; left:0; bottom:0; width:78%; height:62%; background:var(--jade)}
+.portrait-wrap::after{content:""; position:absolute; right:-10px; top:18%; width:22px; height:22px; background:var(--mustard)}
+.portrait-wrap .portrait{position:relative; z-index:1}
+.portrait img{display:block; width:100%; height:100%; object-fit:cover; filter:saturate(.92)}
+.portrait b{font-family:var(--display); font-size:3.4rem; font-weight:800; color:var(--accent); letter-spacing:-.04em}
+.portrait .mono{position:absolute; bottom:8px; left:10px}
+.trace{margin:36px 0 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); position:relative}
+.trace canvas{display:block; width:100%; height:120px}
+.trace figcaption{position:absolute; top:8px; left:0}
+.trace .r{position:absolute; top:8px; right:0}
+.cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:28px}
+.btn{font-family:var(--mono); font-size:.85rem; padding:10px 16px; border:1px solid var(--ink); text-decoration:none; display:inline-flex; gap:8px; align-items:center}
+.btn.primary{background:var(--jade); border-color:var(--jade); color:var(--on-jade)}
+.btn.primary:hover{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn:hover{border-color:var(--accent)}
+
+/* figures row */
+.figures{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-bottom:1px solid var(--rule)}
+.fig{padding:22px 20px 22px 0; border-right:1px solid var(--rule)}
+.fig + .fig{padding-left:20px}
+.fig:last-child{border-right:0}
+.fig .n{font-family:var(--display); font-weight:800; font-size:2.1rem; line-height:1; letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+.fig .n{color:var(--accent)}
+.fig .n em{font-style:normal; color:var(--ink)}
+.fig:first-child{background:var(--jade); color:var(--on-jade); padding-left:20px}
+.fig:first-child .n, .fig:first-child .n em, .fig:first-child p{color:var(--on-jade)}
+.fig p{margin:8px 0 0; font-size:.88rem; color:var(--muted)}
+
+/* sections */
+section{padding:64px 0 8px}
+.sec{display:grid; grid-template-columns:200px 1fr; gap:32px}
+.sec > h2{font-family:var(--mono); font-weight:500; font-size:.8rem; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:6px 0 0}
+.sec > h2::before{content:""; display:inline-block; width:8px; height:8px; background:var(--jade); margin-right:10px; vertical-align:1px}
+
+/* work entries */
+.entry{border-top:1px solid var(--rule); padding:24px 0}
+.entry:first-child{border-top:0; padding-top:0}
+.entry header{display:flex; justify-content:space-between; gap:16px; align-items:baseline; flex-wrap:wrap}
+.entry h3{color:var(--jade); font-family:var(--display); font-weight:600; font-size:1.45rem; letter-spacing:-.015em; line-height:1.2; margin:0; text-wrap:balance}
+.entry .role{margin:4px 0 12px; color:var(--muted); font-size:.95rem}
+.entry p{max-width:var(--measure); margin:0 0 10px}
+.entry ul{margin:0; padding:0; list-style:none; max-width:var(--measure)}
+.entry li{padding-left:18px; position:relative; margin:6px 0}
+.entry li::before{content:""; position:absolute; left:0; top:.72em; width:8px; height:1.5px; background:var(--accent)}
+.tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
+.tags span{font-family:var(--mono); font-size:.72rem; padding:3px 8px; background:var(--jade-soft); color:var(--ink)}
+
+/* compact list */
+.rows{list-style:none; margin:0; padding:0}
+.rows li{display:grid; grid-template-columns:1fr auto; gap:16px; padding:14px 0; border-top:1px solid var(--rule)}
+.rows li:first-child{border-top:0; padding-top:0}
+.rows .t{font-weight:600}
+.rows .s{color:var(--muted); font-size:.92rem}
+.rows .d{font-family:var(--mono); font-size:.8rem; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums}
+
+.pubs{list-style:none; margin:0; padding:0; counter-reset:p}
+.pubs li{padding:14px 0 14px 40px; border-top:1px solid var(--rule); position:relative; max-width:76ch}
+.pubs li:first-child{border-top:0; padding-top:0}
+.pubs li::before{counter-increment:p; content:"[" counter(p) "]"; position:absolute; left:0; font-family:var(--mono); font-size:.8rem; color:var(--accent); top:16px}
+.pubs li:first-child::before{top:2px}
+.pubs .ti{font-weight:600}
+.pubs .st{font-family:var(--mono); font-size:.75rem; color:var(--muted)}
+
+.two{display:grid; grid-template-columns:1fr 1fr; gap:32px}
+.two h4{color:var(--jade); font-family:var(--display); font-weight:600; font-size:1.05rem; margin:0 0 8px}
+.two p, .two li{font-size:.95rem}
+.two ul{margin:0; padding-left:18px}
+
+footer{margin-top:72px; border-top:1px solid var(--rule); padding:28px 0 48px}
+footer .wrap{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.links{display:flex; gap:18px; flex-wrap:wrap}
+
+@media (max-width:820px){
+  .hero-grid{grid-template-columns:1fr}
+  .portrait{max-width:180px}
+  .figures{grid-template-columns:1fr 1fr}
+  .fig:nth-child(2){border-right:0}
+  .fig:nth-child(3){padding-left:0}
+  .fig:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .sec{grid-template-columns:1fr; gap:16px}
+  .two{grid-template-columns:1fr}
+  nav ul{gap:12px}
+}
+@media (max-width:420px){
+  nav{display:none}
+  .rows li{grid-template-columns:1fr}
+}
+@keyframes rise{from{transform:translateY(8px)}to{transform:none}}
+.hero .mono, .hero h1, .hero .lede, .hero .cta, .portrait-wrap{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.06s} .hero .lede{animation-delay:.12s} .hero .cta{animation-delay:.18s} .portrait-wrap{animation-delay:.1s}
+.trace canvas{cursor:crosshair}
+.keys{display:flex; flex-wrap:wrap; gap:0; margin:14px 0 4px; border:1px solid var(--rule); background:var(--surface); width:fit-content; max-width:100%}
+.keys div{padding:8px 14px; border-right:1px solid var(--rule)}
+.keys div:last-child{border-right:0}
+.keys b{display:block; font-family:var(--display); font-weight:800; font-size:1.15rem; color:var(--accent); letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+.keys span{font-family:var(--mono); font-size:.7rem; color:var(--muted)}
+.cards{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+.card{background:var(--surface); border:1px solid var(--rule); border-top:3px solid var(--jade); padding:18px 18px 16px; display:flex; flex-direction:column; gap:8px}
+.card h3{font-family:var(--display); font-weight:600; font-size:1.12rem; line-height:1.25; margin:0; color:var(--jade); text-wrap:balance}
+.card .ctx{font-family:var(--mono); font-size:.72rem; color:var(--muted)}
+.card p{margin:0; font-size:.94rem}
+.card .num{margin-top:auto; padding-top:6px; font-family:var(--display); font-weight:800; font-size:1.25rem; color:var(--accent); letter-spacing:-.02em}
+.card .num span{font-family:var(--mono); font-weight:400; font-size:.72rem; color:var(--muted); letter-spacing:0; margin-left:6px}
+@media (max-width:820px){ .cards{grid-template-columns:1fr} }
+.proof{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px}
+.proof a{font-family:var(--mono); font-size:.78rem}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto!important; animation:none!important} }
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:72px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">A.M. Shembekar</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#more">More</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="mono">PhD candidate · IISc Bengaluru · Prime Minister's Research Fellow</p>
+          <h1>Anay Mohan Shembekar<span>Engineer-builder. I go deep on hard problems and own them end to end.</span></h1>
+          <p class="lede">I started in hardware, owning the <strong>electric powertrain</strong> of IIT Madras's SpaceX Hyperloop pod and then <strong>leading its whole engineering team</strong>. My PhD added depth in <strong>simulation and experiments</strong> on elastic waves, most recently silicon wafer defect detection in France. In between, I built pricing models in <strong>quantitative research at J.P. Morgan</strong>.</p>
+          <div class="cta">
+            <a class="btn primary" href="Anay_Shembekar_CV.pdf">Download CV (PDF)</a>
+            <a class="btn" href="#work">See selected work</a>
+          </div>
+        </div>
+        <div class="portrait-wrap"><div class="portrait">
+          <img src="anay.jpg" alt="Portrait of Anay Mohan Shembekar" width="600" height="800">
+        </div></div>
+      </div>
+
+      <figure class="trace">
+        <canvas id="wave" aria-label="Animated tone-burst waveform; click to send a new pulse" role="img"></canvas>
+        <figcaption class="mono">tone burst · 5 cycles · Hann window</figcaption>
+        <span class="mono r">click to send a pulse</span>
+      </figure>
+    </div>
+
+    <div class="figures">
+      <div class="fig"><div class="n"><em>8</em>th</div><p>of 1,600+ teams, SpaceX Hyperloop Pod Competition 2019</p></div>
+      <div class="fig"><div class="n">40<em>+</em></div><p>engineers led across 8 subsystems, Mar–Jul 2018</p></div>
+      <div class="fig"><div class="n">50<em>×</em></div><p>speedup from coupling atomistic and spectral finite element models</p></div>
+      <div class="fig"><div class="n">4<em> of </em>6</div><p>months: France wafer experiments done two months ahead of plan</p></div>
+    </div>
+
+    <section id="work">
+      <div class="sec">
+        <h2>Selected work</h2>
+        <div>
+          <article class="entry">
+            <header><h3>Hyperloop pod: EV powertrain and engineering leadership</h3><span class="mono">2017–2019</span></header>
+            <p class="role">Engineering Team Lead (Mar–Jul 2018) · Propulsion Team Lead · Avishkar Hyperloop, IIT Madras</p>
+            <div class="keys"><div><b>740 V</b><span>battery pack</span></div><div><b>0.3 g</b><span>final design point</span></div><div><b>~10%</b><span>pod cost cut</span></div></div>
+                        <ul>
+              <li>Stepped up to lead the entire engineering team for five months while the founders raised capital: recruitment, subsystem timelines toward the final design review, and a component review that cut pod cost by about 10%.</li>
+              <li>Owned the powertrain against a fixed budget: motor, inverter and a 740 V 20s2p Li-Po pack, and designed the transmission in-house instead of buying a costlier vendor unit.</li>
+              <li>Redesigned twice as constraints changed, ending on a lighter direct-drive BLDC system at a 0.3 g design point.</li>
+              <li>Thermal simulations of motor and controller in vacuum, fault-tolerant limp-home kinematics, and a dynamometer test bed design.</li>
+            </ul>
+            <div class="tags"><span>Fusion 360</span><span>Ansys</span><span>BLDC / PMSM</span><span>Battery pack sizing</span><span>Leadership</span></div>
+            <div class="proof"><a href="https://timesofindia.indiatimes.com/city/chennai/spacexs-hyperloop-competition-finals-iit-madras-team-secures-eighth-spot/articleshow/70399556.cms">Times of India: team finishes 8th</a><a href="https://www.youtube.com/watch?v=Ybxk6XXY-Gk">Video: explaining the propulsion system (2019)</a></div>
+          </article>
+
+          <article class="entry">
+            <header><h3>Silicon wafer defect detection</h3><span class="mono">Mar–Jul 2026</span></header>
+            <p class="role">Research Intern · IEMN Laboratory, UPHF, Valenciennes, France</p>
+            <div class="keys"><div><b>4 MHz</b><span>excitation bandwidth</span></div><div><b>3%</b><span>hidden thickness error found</span></div><div><b>4 of 6</b><span>months used</span></div></div>
+                        <ul>
+              <li>Built an end-to-end workflow: 3D Elmer FEM models, laser Doppler vibrometry up to 4 MHz across 72 points, passive ambient-noise methods adapted from seismology, and Python pipelines for beamforming and localisation.</li>
+              <li>Traced a model–measurement mismatch to wafer thickness: the data alone moved the model from the 500 µm we were given to about 390 µm, later backed by a gauge reading.</li>
+              <li>Designed and 3D-printed the wafer fixture, and finished all experiments in four months against a six-month plan.</li>
+            </ul>
+            <div class="tags"><span>Elmer FEM</span><span>Gmsh</span><span>LDV</span><span>Python</span><span>Root-cause analysis</span></div>
+          </article>
+
+          <article class="entry">
+            <header><h3>Multiscale models for elastic waves</h3><span class="mono">2021–present</span></header>
+            <p class="role">PhD research · Computational Wave Mechanics Lab, IISc · Guide: <a href="https://sites.google.com/view/cwml/s-gopalakrishnan">Prof. S. Gopalakrishnan</a></p>
+            <div class="keys"><div><b>50×</b><span>faster</span></div><div><b>≤2%</b><span>displacement error</span></div></div>
+                        <ul>
+              <li>Coupled the atomistic Quasicontinuum method with the Spectral Finite Element Method: 50× faster than full Quasicontinuum at up to 2% displacement error.</li>
+              <li>Calibrated Eringen's nonlocal length scale against Quasicontinuum for aluminium nanostructures, validated against published experiments.</li>
+              <li>Now applying the framework to metal deposits on silicon wafers.</li>
+            </ul>
+            <div class="tags"><span>Quasicontinuum</span><span>Spectral FEM</span><span>Fortran</span><span>NumPy / Numba</span></div>
+          </article>
+
+          <article class="entry">
+            <header><h3>Pricing models for rates trading</h3><span class="mono">2020–2021</span></header>
+            <p class="role">Quantitative Analyst · Quantitative Research, J.P. Morgan Services India</p>
+            <div class="keys"><div><b>3</b><span>trading regions served</span></div><div><b>1</b><span>model change in production</span></div></div>
+                        <ul>
+              <li>Modelled and valued rate–rate and rate–spread instruments, calibrated to market data, supporting desks in the UK, Germany and the US.</li>
+              <li>Implemented a correlation-based model adaptation that went into production, working from requirements set by the desk head.</li>
+            </ul>
+            <div class="tags"><span>C++</span><span>Python</span><span>Calibration</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="sec">
+        <h2>Other projects</h2>
+        <div class="cards">
+          <article class="card">
+            <span class="ctx">M.Tech thesis · IIT Madras · 2019–20</span>
+            <h3>Air–water robot</h3>
+            <p>Concept to detailed design of a robot that flies and swims: weighted decision matrix, CFD on six hulls in air and water, airfoil control planes, and mode-switching control logic modelled in Simulink.</p>
+            <div class="num">~10%<span>less drag in water (Cd 0.93 → 0.83)</span></div>
+          </article>
+          <article class="card">
+            <span class="ctx">Smart India Hackathon 2025 · team lead</span>
+            <h3>Retrofit smart cane</h3>
+            <p>A clip-on kit for visually impaired users: ESP32 hub, ultrasonic and time-of-flight sensing at three heights, haptic and audio cues, SOS with GPS, and deep-sleep power management.</p>
+            <div class="num">₹3,100<span>prototype bill of materials</span></div>
+          </article>
+          <article class="card">
+            <span class="ctx">Course project · IIT Madras · 2018</span>
+            <h3>Automated manufacturing plant</h3>
+            <p>Planned and simulated material flow through a plant in Siemens Tecnomatix, timed processes with CAM, RobotStudio and Jack, and costed materials, capital and labour.</p>
+          </article>
+          <article class="card">
+            <span class="ctx">Course project · IIT Madras · 2017</span>
+            <h3>Self-balancing arm</h3>
+            <p>Built an arm balanced by propellers on DC motors, handled the electronics and code, and tuned closed-loop PID control on an MPU-6050 sensor.</p>
+            <div class="num">60°<span>balancing range</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="sec">
+        <h2>Experience</h2>
+        <ul class="rows">
+          <li><div><div class="t">Research Intern</div><div class="s">IEMN Laboratory, UPHF, Valenciennes, France</div></div><div class="d">2026</div></li>
+          <li><div><div class="t">Quantitative Analyst</div><div class="s">J.P. Morgan Services India, Mumbai</div></div><div class="d">2020–21</div></li>
+          <li><div><div class="t">Undergraduate Research Intern, PURE Scholar</div><div class="s">Purdue University, USA · aircraft thermal management in MATLAB/Simulink</div></div><div class="d">2019</div></li>
+          <li><div><div class="t">Engineering Team Lead &amp; Propulsion Team Lead</div><div class="s">Avishkar Hyperloop, IIT Madras</div></div><div class="d">2017–19</div></li>
+          <li><div><div class="t">Winter &amp; Summer Intern</div><div class="s">Caterpillar India · Abaqus post-processing tools that cut a week of work to under 8 hours</div></div><div class="d">2017–18</div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="publications">
+      <div class="sec">
+        <h2>Publications</h2>
+        <div>
+          <ol class="pubs">
+            <li><span class="ti">Calibrating Eringen's nonlocal length with the Quasicontinuum method: what it measures in extension, bending and bulk waves.</span> A.M. Shembekar, S. Gopalakrishnan. <em>International Journal of Engineering Science</em>. <span class="st">Under review · 2026</span></li>
+            <li><span class="ti"><a href="https://www.sciencedirect.com/science/article/pii/S1674200126003524">Early-loading tangent modulus maps for dense spherical DEM assemblies across contact laws and particle-modulus regimes.</a></span> B. Pramay, A.M. Shembekar, S. Gopalakrishnan. <em>Particuology</em>. <span class="st">In press · 2026</span></li>
+            <li><span class="ti"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6749601">Wave-based inverse estimation of elastic stiffness and density in textured polycrystalline media.</a></span> H. Gupta, A.M. Shembekar, S. Gopalakrishnan, S. Suwas. <span class="st">Preprint, under review · 2026</span></li>
+            <li><span class="ti"><a href="https://doi.org/10.1115/SSDM2025-151720">Concurrent multiscale framework for wave propagation in crystalline material nanostructures.</a></span> A.M. Shembekar, S. Gopalakrishnan. ASME SSDM. <span class="st">2025</span></li>
+            <li><span class="ti"><a href="https://doi.org/10.1115/SSDM2025-151658">Simulating elastic wave propagation in RR1000 alloy: impact of grain size and texture.</a></span> H. Gupta, A.M. Shembekar, S. Gopalakrishnan, S. Suwas. ASME SSDM. <span class="st">2025</span></li>
+            <li><span class="ti"><a href="https://doi.org/10.1115/SSDM2025-152166">Constitutive modelling of granular materials using Cundall-Strack and Hertz-Mindlin contact models.</a></span> B. Pramay, S. Gopalakrishnan, A.M. Shembekar. ASME SSDM. <span class="st">2025</span></li>
+            <li><span class="ti"><a href="https://doi.org/10.1016/j.matpr.2023.08.146">Atomistic and continuum length scale coupling in materials using quasicontinuum method.</a></span> A.M. Shembekar, S. Gopalakrishnan. <em>Materials Today: Proceedings</em> 108, 65–72. <span class="st">2024</span></li>
+          </ol>
+          <p class="mono" style="margin-top:16px">Full list on <a href="https://scholar.google.com/citations?user=km5l7cAAAAAJ">Google Scholar</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="more">
+      <div class="sec">
+        <h2>Also</h2>
+        <div class="two">
+          <div>
+            <h4>Leadership</h4>
+            <div class="keys"><div><b>20</b><span>organisers led</span></div><div><b>150</b><span>participants</span></div><div><b>5 days</b><span>6 sports</span></div></div>
+            <ul>
+              <li>Team Lead, Smart India Hackathon 2025: retrofit smart cane for visually impaired users; reached the in-person pre-final round.</li>
+              <li>Organising Team Lead, IISc Aerospace Sports Fest 2026: 20-person team, five days, six sports.</li>
+              <li>Manager, Editorial &amp; Research Team, E-Cell IIT Madras, 2017.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Teaching</h4>
+            <ul>
+              <li>Course Instructor, PMRF Teaching Programme: Finite Element Modelling with FEniCS (2025); Introduction to Numerical Methods (2022).</li>
+              <li>NPTEL Teaching Assistant for four courses, 2022–2024.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Education</h4>
+            <ul>
+              <li>Ph.D., Aerospace Engineering, IISc Bengaluru. Thesis submission expected Q2 2027.</li>
+              <li>B.Tech Mechanical + M.Tech Robotics (Dual Degree), IIT Madras, 2020. Ranked 6th of 160+.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Awards</h4>
+            <ul>
+              <li>Prime Minister's Research Fellowship (2022)</li>
+              <li>PURE Scholarship, Purdue (2019)</li>
+              <li>JEE Advanced AIR 1332; KVPY and NTSE scholar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="sec">
+        <h2>Contact</h2>
+        <div>
+          <p style="max-width:var(--measure);margin:0 0 12px">The best way to reach me is LinkedIn. I'm open to conversations about roles that combine deep technical work with end-to-end ownership.</p>
+          <div class="links mono">
+            <a href="https://www.linkedin.com/in/anay-shembekar">LinkedIn</a>
+            <a href="https://scholar.google.com/citations?user=km5l7cAAAAAJ">Google Scholar</a>
+            <a href="Anay_Shembekar_CV.pdf">CV (PDF)</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap mono">
+    <span>© 2026 Anay Mohan Shembekar</span>
+    <span>Bengaluru, India</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const c = document.getElementById('wave');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let w=0, h=0, t0=performance.now(), running=false;
+  const pulses = [];                         // {x0, born} launched by clicks
+  function size(){
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    w = c.clientWidth; h = c.clientHeight;
+    c.width = Math.round(w*dpr); c.height = Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function col(name, fb){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fb; }
+  function burst(x, centre, width, cycles){
+    const u = (x-centre)/width;
+    if(u < -0.5 || u > 0.5) return 0;
+    return 0.5*(1+Math.cos(2*Math.PI*u)) * Math.sin(2*Math.PI*cycles*u);
+  }
+  function draw(now){
+    const time = reduce ? 1.6 : (now - t0)/1000;
+    ctx.clearRect(0,0,w,h);
+    const mid = h/2;
+    ctx.strokeStyle = col('--rule','#dbd1bf'); ctx.lineWidth = 1;
+    ctx.beginPath();
+    for(let gx=0; gx<w; gx+=40){ ctx.moveTo(gx+.5,0); ctx.lineTo(gx+.5,h); }
+    ctx.moveTo(0,mid+.5); ctx.lineTo(w,mid+.5); ctx.stroke();
+
+    const period = 9, phase = (time % period)/period;
+    const main = {c:-0.15*w + phase*1.3*w, wd:160+phase*120, a:(h*0.36)*(1-0.35*phase)};
+    const live = [];
+    for(const p of pulses){
+      const age = (now - p.born)/1000;
+      if(age > 3.2) continue;
+      live.push({c:p.x0 + age*w*0.32, wd:120+age*70, a:(h*0.3)*(1-age/3.2)});
+    }
+    pulses.splice(0, pulses.length, ...pulses.filter(p => (now-p.born)/1000 <= 3.2));
+
+    ctx.strokeStyle = col('--accent','#c4452c'); ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    for(let x=0; x<=w; x+=1){
+      let y = mid - main.a*burst(x, main.c, main.wd, 5) - 1.2*Math.sin(x*0.09 + time*3);
+      for(const q of live) y -= q.a*burst(x, q.c, q.wd, 4);
+      x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    if(!reduce || pulses.length){ requestAnimationFrame(draw); } else { running=false; }
+  }
+  function start(){ if(!running){ running=true; requestAnimationFrame(draw); } }
+  c.addEventListener('click', e => {
+    const r = c.getBoundingClientRect();
+    pulses.push({x0: e.clientX - r.left, born: performance.now()});
+    start();
+  });
+  size();
+  window.addEventListener('resize', () => { size(); start(); });
+  start();
+})();
+</script>
+</body>
+</html>
